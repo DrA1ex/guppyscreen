@@ -2,6 +2,7 @@
 #define __PROMPT_PANEL_H__
 
 #include "lvgl/lvgl.h"
+#include "lvgl/src/font/lv_font.h"
 #include "websocket_client.h"
 #include "notify_consumer.h"
 #include "button_container.h"
@@ -16,35 +17,33 @@ struct SharedButton {
 };
 
 class PromptPanel : public NotifyConsumer {
-    public:
-        PromptPanel(KWebSocketClient &ws, std::mutex &lock, lv_obj_t *parent);
-        ~PromptPanel();
+public:
+    PromptPanel(KWebSocketClient &ws, std::mutex &lock, lv_obj_t *parent);
+    ~PromptPanel() override;
 
-        void handle_macro_response(json &j);
-        void consume(json &j);
+    void handle_macro_response(json &j);
+    void consume(json &j) override;
 
-        lv_obj_t *get_container();
-        void handle_callback(lv_event_t *event);
+    void handle_callback(lv_event_t *event);
 
-        static void _handle_callback(lv_event_t *event) {
-            PromptPanel *panel = (PromptPanel*)event->user_data;
-            panel->handle_callback(event);
-        };
+    static void _handle_callback(lv_event_t *event) {
+        PromptPanel *panel = (PromptPanel *) event->user_data;
+        panel->handle_callback(event);
+    };
 
-        void foreground();
-        void background();
+    void foreground();
+    void background();
 
-    private:
+private:
+    void check_height();
 
-        void check_height();
-
-        KWebSocketClient &ws;
-        lv_obj_t *promptpanel_cont;
-        lv_obj_t *prompt_cont;
-        lv_obj_t *flex;
-        lv_obj_t *header;
-        lv_obj_t *button_group_cont;
-        lv_obj_t *footer_cont;
+    KWebSocketClient &ws;
+    lv_obj_t *promptpanel_cont;
+    lv_obj_t *prompt_cont;
+    lv_obj_t *flex;
+    lv_obj_t *header;
+    lv_obj_t *button_group_cont;
+    lv_obj_t *footer_cont;
 
 };
 

@@ -17,6 +17,9 @@
 #include "state.h"
 #include "theme.h"
 
+#include <experimental/filesystem>
+namespace fs = std::experimental::filesystem;
+
 GuppyScreen *GuppyScreen::instance = NULL;
 lv_style_t GuppyScreen::style_container;
 lv_style_t GuppyScreen::style_imgbtn_default;

@@ -6,13 +6,13 @@
 using json = nlohmann::json;
 
 class NotifyConsumer {
- public:
-  NotifyConsumer(std::mutex &lv_lock);
-  ~NotifyConsumer();
-  virtual void consume(nlohmann::json &data) = 0;
-  // virtual void consume(std::string &str) = 0;
- protected:
-  std::mutex &lv_lock;
+public:
+    NotifyConsumer(std::mutex &lv_lock);
+    virtual ~NotifyConsumer();
+    virtual void consume(nlohmann::json &data) = 0;
+    // virtual void consume(std::string &str) = 0;
+protected:
+    std::mutex &lv_lock;
 };
 
 #endif // __NOTIFY_CONSUMER_H__

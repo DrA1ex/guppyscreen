@@ -8,7 +8,7 @@
 #include <mutex>
 
 class BeltsCalibrationPanel {
- public:
+public:
   BeltsCalibrationPanel(KWebSocketClient &c, std::mutex &l);
   ~BeltsCalibrationPanel();
 
@@ -19,21 +19,21 @@ class BeltsCalibrationPanel {
   void handle_update_slider(lv_event_t *event);
 
   static void _handle_callback(lv_event_t *event) {
-    BeltsCalibrationPanel *panel = (BeltsCalibrationPanel*)event->user_data;
+    BeltsCalibrationPanel *panel = (BeltsCalibrationPanel *) event->user_data;
     panel->handle_callback(event);
   };
-  
+
   static void _handle_image_clicked(lv_event_t *event) {
-    BeltsCalibrationPanel *panel = (BeltsCalibrationPanel*)event->user_data;
+    BeltsCalibrationPanel *panel = (BeltsCalibrationPanel *) event->user_data;
     panel->handle_image_clicked(event);
   };
 
   static void _handle_update_slider(lv_event_t *event) {
-    BeltsCalibrationPanel *panel = (BeltsCalibrationPanel*)event->user_data;
+    BeltsCalibrationPanel *panel = (BeltsCalibrationPanel *) event->user_data;
     panel->handle_update_slider(event);
   };
 
- private:
+private:
   KWebSocketClient &ws;
   std::mutex &lv_lock;
   lv_obj_t *cont;

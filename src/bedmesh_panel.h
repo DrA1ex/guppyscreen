@@ -10,9 +10,9 @@
 #include <vector>
 
 class BedMeshPanel : public NotifyConsumer {
- public:
+public:
   BedMeshPanel(KWebSocketClient &c, std::mutex &l);
-  ~BedMeshPanel();
+  ~BedMeshPanel() override;
 
   void consume(json &j);
   void foreground();
@@ -27,36 +27,36 @@ class BedMeshPanel : public NotifyConsumer {
   void mesh_draw_cb(lv_event_t *e);
 
   static void _handle_callback(lv_event_t *event) {
-    BedMeshPanel *panel = (BedMeshPanel*)event->user_data;
+    BedMeshPanel *panel = (BedMeshPanel *) event->user_data;
     panel->handle_callback(event);
   };
 
   static void _handle_profile_action(lv_event_t *event) {
-    BedMeshPanel *panel = (BedMeshPanel*)event->user_data;
+    BedMeshPanel *panel = (BedMeshPanel *) event->user_data;
     panel->handle_profile_action(event);
   };
-  
+
   static void _handle_prompt_save(lv_event_t *event) {
-    BedMeshPanel *panel = (BedMeshPanel*)event->user_data;
+    BedMeshPanel *panel = (BedMeshPanel *) event->user_data;
     panel->handle_prompt_save(event);
   };
-  
+
   static void _handle_prompt_cancel(lv_event_t *event) {
-    BedMeshPanel *panel = (BedMeshPanel*)event->user_data;
+    BedMeshPanel *panel = (BedMeshPanel *) event->user_data;
     panel->handle_prompt_cancel(event);
   };
 
   static void _handle_kb_input(lv_event_t *e) {
-    BedMeshPanel *panel = (BedMeshPanel*)e->user_data;
+    BedMeshPanel *panel = (BedMeshPanel *) e->user_data;
     panel->handle_kb_input(e);
   };
 
   static void _mesh_draw_cb(lv_event_t *e) {
-    BedMeshPanel *panel = (BedMeshPanel*)e->user_data;
+    BedMeshPanel *panel = (BedMeshPanel *) e->user_data;
     panel->mesh_draw_cb(e);
   };
 
- private:
+private:
   KWebSocketClient &ws;
   lv_obj_t *cont;
   lv_obj_t *prompt;
