@@ -10,6 +10,7 @@ LD	= $(CROSS_COMPILE)ld
 AR	= $(CROSS_COMPILE)ar
 NM	= $(CROSS_COMPILE)nm
 STRIP 	= $(CROSS_COMPILE)strip
+RANLIB=$(CROSS_COMPILE)ranlib
 endif
 
 LVGL_DIR_NAME 	?= lvgl
@@ -23,7 +24,7 @@ WARNINGS		:= -Wall -Wextra -Wno-unused-function -Wno-error=strict-prototypes -Wp
 					-Wno-missing-field-initializers -Wtype-limits -Wsizeof-pointer-memaccess -Wno-format-nonliteral -Wpointer-arith -Wno-cast-qual \
 					-Wunreachable-code -Wno-switch-default -Wreturn-type -Wmultichar -Wformat-security -Wno-sign-compare
 CFLAGS 			?= -O3 -g0 -MD -MP -I$(LVGL_DIR)/ $(WARNINGS) 
-LDFLAGS 		?= -static -lm -Llibhv/lib -Lspdlog/build -l:libhv.a -latomic -lpthread -Lwpa_supplicant/wpa_supplicant/ -l:libwpa_client.a -lstdc++fs -l:libspdlog.a
+LDFLAGS 		?= -lm -Llibhv/lib -Lspdlog/build -l:libhv.a -latomic -lpthread -Lwpa_supplicant/wpa_supplicant/ -l:libwpa_client.a -lstdc++fs -l:libspdlog.a
 BIN 			= guppyscreen
 BUILD_DIR 		= ./build
 BUILD_OBJ_DIR 	= $(BUILD_DIR)/obj
@@ -103,11 +104,11 @@ libhv.a:
 
 libspdlog.a:
 	@mkdir -p $(SPDLOG_DIR)/build
-	@cmake -B $(SPDLOG_DIR)/build -S $(SPDLOG_DIR)/ -DCMAKE_CXX_COMPILER=$(CXX)
+	@cmake -B $(SPDLOG_DIR)/build -S $(SPDLOG_DIR)/ -DCMAKE_CXX_COMPILER=$(CXX) -DCMAKE_TOOLCHAIN_FILE=../toolchain.cmake -DCMAKE_OSX_SYSROOT="" -DCMAKE_OSX_DEPLOYMENT_TARGET=""
 	$(MAKE) -C $(SPDLOG_DIR)/build -j$(nproc)
 
 wpaclient:
-	$(MAKE) -C wpa_supplicant/wpa_supplicant -j$(nproc) libwpa_client.a
+	$(MAKE) -C wpa_supplicant/wpa_supplicant CC=$(CC) RANLIB=$(CROSS_COMPILE)ranlib -j$(nproc) libwpa_client.a
 
 $(BUILD_OBJ_DIR)/%.o: %.cpp
 	@mkdir -p $(dir $@)
